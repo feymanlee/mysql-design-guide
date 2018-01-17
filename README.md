@@ -232,38 +232,38 @@ MySQL 的查询速度依赖良好的索引设计，因此索引对于高性能�
 ## 语句设计规范
 
  - **应该** 使用预编译语句
-  - 只传参数，比传递 SQL 语句更高效
-  - 一次解析，多次使用
-  - 降低 SQL 注入概率
+   - 只传参数，比传递 SQL 语句更高效
+   - 一次解析，多次使用
+   - 降低 SQL 注入概率
 
  -  避免隐式转换
-  - 会导致索引失效
+   - 会导致索引失效
 
  - 充分利用前缀索引
-  - **必须** 是最左前缀
-  - **不该** 同时用到两个范围条件
-  - **不该** 使用 `%` 前导的查询，如 `like '%ab'`
+   - **必须** 是最左前缀
+   - **不该** 同时用到两个范围条件
+   - **不该** 使用 `%` 前导的查询，如 `like '%ab'`
   
  -  **不该** 使用负向查询，如 not in/like
-  - 无法使用索引，导致全表扫描
-  - 全表扫描导致 buffer pool 利用率降低
+   - 无法使用索引，导致全表扫描
+   - 全表扫描导致 buffer pool 利用率降低
   
  - 避免使用大表的 JOIN
-  - MySQL 最擅长的是单表的主键/二级索引查询
-  - JOIN 消耗较多内存，产生临时表
+   - MySQL 最擅长的是单表的主键/二级索引查询
+   - JOIN 消耗较多内存，产生临时表
 
  - **不该** 在数据库中进行数学运算
-  - MySQL 不擅长数学运算和逻辑判断
-  - 无法使用索引
+   - MySQL 不擅长数学运算和逻辑判断
+   - 无法使用索引
 
  - 减少与数据库的交互次数
-  - INSERT … ON DUPLICATE KEY UPDATE
-  - REPLACE INTO、INSERT IGNORE 、INSERT INTO VALUES(),(),()
-  - UPDATE … WHERE ID IN(10,20,50,…)
+   - INSERT … ON DUPLICATE KEY UPDATE
+   - REPLACE INTO、INSERT IGNORE 、INSERT INTO VALUES(),(),()
+   - UPDATE … WHERE ID IN(10,20,50,…)
   
  - 合理的使用分页
-  - 限制分页展示的页数
-  - 采用延迟关联
+   - 限制分页展示的页数
+   - 采用延迟关联
   
 > #### 如何正确的使用分页？
 > 假如有类似下面分页语句：```SELECT * FROM table  ORDER BY id LIMIT 10000, 10```。
@@ -274,8 +274,8 @@ MySQL 的查询速度依赖良好的索引设计，因此索引对于高性能�
 ```select * from table where id >= (select id from table order by id limit #offset#, 1) ``` 
 
  - **不该** 使用大 SQL，拆分成小 SQL
-  - 充分利用 QUERY CACHE
-  - 充分利用多核 CPU
+   - 充分利用 QUERY CACHE
+   - 充分利用多核 CPU
   
  - **应该** 使用 `in` 代替 `or`
  - `in` 的值 **不该** 超过 1000 个
